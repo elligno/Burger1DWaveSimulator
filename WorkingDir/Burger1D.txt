@@ -1,0 +1,147 @@
+
+
+AUTHOR: Jean Bélanger
+DATE: 06 august 2000
+
+
+DEMO version: 1.0
+
+IMPORTANT: Type of project: Microsoft Win 32 Console application (simple application)
+
+
+This a version of the Burger Solver in one-dimension.
+
+1) Upwind schemes (one-sided and Roe) are used for the discretization of the numerical flux.
+
+2) A second order Runge-Kutta time scheme is used for time stepping
+
+  REFERENCES:
+  -----------
+
+  1) Shu and Osher 1988 "Effecient implementation of Non-Oscillatory Schemes".
+  2) Harten and al. " Uniformly high order Non-Oscillatory accurate scheme III."
+  3) R.J. Leveque "Numerical Methods for Conservation Laws"
+
+ The two-stage Runge-Kutta (RK) method below 
+ belongs to a family of RK methods which preserve TVD property under
+ CFL certain conditions.
+
+
+       Integral of the flux over each cell surface
+       Finite Volume Equation is va[n+1] = va[n] + (dt/dx)*F      
+
+	Conservative Form:
+	------------------ 
+	U_j[n+1] = U_j[n] - (dt/dx)[F(U[n];j) - F(U[n];j-1)]                              (1)
+
+
+	time stepping by 2nd order Runge-Kutta:
+	---------------------------------------
+	UP_j[n+1/2] = U_j[n] - (dt/2*dx)[F(U[n];j) - F(U[n];j-1)]      (predictor)       
+                                                                                      (2)
+	U_j[n+1] = U_j[n] - (dt/dx)[F(UP[n+1/2];j) - F(UP[n+1/2];j-1]  (corrector)
+                                                             
+
+STEP INVOLVED IN THE CALCULATION (FINITE VOLUME METHOD)
+-------------------------------------------------------
+
+1) The computational domain is divided in volume (cells) 
+   Initial condition: average of the function on each cell (here we use a sine function)
+
+2) reconstruction of the function over the whole domain by primitive variables
+
+3) we compute numerical flux F at each interface (cell)  see equation (1) above
+
+4) two-steps Runge-Kutta (time integration)  see equations (2) above
+
+5) final solution 
+
+All the process above are included in the time loop (see the function time_step).
+The time loop is in the main program.
+
+
+COMPUTED EQUATION:
+------------------
+
+Burger equation describe the propagation of a non-linear wave.
+   u_t u*u_x = nu*u_xx 
+
+   This equation is a simplification of the mechanical fluid equations. These
+   equations describe the balance between the different forces. In our case convective 
+   force and diffusive force are considered. 
+
+Terminology: 
+			 u_t -> time derivative of the function u
+			 u_x -> first derivative of the function u
+             u_xx -> second derivative of the function u
+
+	Physical meaning (force):
+			 u*u_x  : convection force (non-linear term which cause the developing shock)
+			 nu*u_xx: diffusive force (smooth gradient)
+
+where nu represent viscosity.
+
+This equation develop a shock when 
+unbalance between the convective effect (force) and the diffusive force occur 
+(viscosity (nu) tend toward zero), 
+
+INPUT (see file jbtest.dat)
+
+TEST 1:   (testing functions)
+-------
+nu               0.01
+dt               0.001
+Nts              10
+order            4
+sten_type        1
+scheme_type      2
+recon_test       1    test reconstruction
+deriv_test       1    test derivative 
+stencil_test     1    test stencil
+periodic_stencil 0
+test0            1    exit
+end              0
+
+
+
+Simulations for visualizing the developing shock: 
+--------------------------------------------------
+
+TEST 2:    
+--------
+
+nu               0.01
+dt               0.001
+Nts              10
+order            4
+sten_type        0
+scheme_type      1        non shock capturing
+recon_test       0
+deriv_test       0
+stencil_test     0
+periodic_stencil 0
+test0            0
+end              0
+
+ 
+
+TEST 3:
+--------
+
+nu               0.01
+dt               0.001
+Nts              10
+order            4
+sten_type        0
+scheme_type      2        shock capturing
+recon_test       0
+deriv_test       0
+stencil_test     0
+periodic_stencil 0
+test0            0
+end              0
+
+
+
+
+            

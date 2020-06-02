@@ -1,0 +1,11 @@
+nu               0.05
+dt               0.001
+Nts              8
+order            2
+sten_type        1
+recon_test       0
+deriv_test       0
+stencil_test     1
+periodic_stencil 0
+test0            1
+end              0

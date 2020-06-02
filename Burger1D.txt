@@ -1,0 +1,80 @@
+
+
+AUTHOR: Jean Bélanger
+DATE: 05 august 2000
+
+
+DEMO version: 1.0
+
+IMPORTANT: Type of project: Microsoft Win 32 Console application
+
+
+This a version of the Burger Solver in one-dimension.
+
+1) An upwind scheme is used for the discretization of the numerical flux.
+
+2) A second order Runge-Kutta time scheme is used for time stepping
+
+  Refrences:
+  ---------
+  1)Shu and Osher 1988 "Effecient implementation of Non-Oscillatory Schemes .
+  2) Harten et al. " Uniformly high order Non-Oscillatory accurate scheme III."
+
+
+ The two-stage Runge-Kutta (RK) method below 
+ belongs to a family of RK methods which preserve TVD property under
+ CFL certain conditions.
+
+
+       Integral of the flux over each cell surface
+       Finite Volume Equation is va[n+1] = va[n] + (dt/dx)*F      
+
+	Conservative Form:
+	------------------ 
+	U_j[n+1] = U_j[n] - (dt/dx)[F(U[n];j) - F(U[n];j-1)]
+
+
+	time stepping by 2nd order Runge-Kutta:
+	---------------------------------------
+	UP_j[n+1/2] = U_j[n] - (dt/2*dx)[F(U[n];j) - F(U[n];j-1)]      (predictor)
+ 
+	U_j[n+1] = U_j[n] - (dt/dx)[F(UP[n+1/2];j) - F(UP[n+1/2];j-1]  (corrector)
+                                                             
+
+
+Burger equation: describe the propagation of a non-linear wave.
+   u_t u*u_x = nu*u_xx 
+
+   This equation is a simplification of the mechanical fluid equations. These
+   equations describe the balance between the different forces. In this case convective 
+   force and diffusive force. 
+
+Terminology: 
+			 u_t -> time derivative of the function u
+			 u_x -> first derivative of the function u
+             u_xx -> second derivative of the function u
+
+	Physical meaning (force):
+			 u*u_x  : convection force (non-linear)
+			 nu*u_xx: diffusive force
+
+where nu represent viscosity.
+
+This equation develop a shock when 
+unbalance between the convective effect (force) and the diffusive force (nu tend toward zero), 
+
+it the develop a shock.
+Non-homogeinity of the matter, strong gradient. 
+
+
+Simulations for visualizing the developing shock: 
+
+
+TEST 1:
+
+
+TEST 2:
+
+
+TEST 3:
+             
